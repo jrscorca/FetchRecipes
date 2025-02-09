@@ -27,11 +27,15 @@ struct RecipeListView: View {
     
     var body: some View {
         InfiniteScrollView(recipes: viewModel.recipes) { recipe in
-            Text(recipe.name)
+            RecipeCardView(name: recipe.name, cuisine: recipe.cuisine, imageURL: recipe.photoUrlSmall)
         }
         .onAppear {
             Task {
-                await viewModel.fetchRecipes()
+                do {
+                    try await viewModel.fetchRecipes()
+                } catch {
+                    #warning("Handle error by showing alert")
+                }
             }
             
         }

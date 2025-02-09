@@ -7,7 +7,7 @@
 
 import Foundation
 
-struct RecipeService: RecipeServiceProtocol {
+actor RecipeService: RecipeServiceProtocol {
     
     func fetchRecipes(endpoint: RecipeEndpoint = .fetchAllRecipes) async throws -> [Recipe] {
         
