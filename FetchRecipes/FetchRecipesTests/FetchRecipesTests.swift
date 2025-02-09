@@ -33,7 +33,7 @@ final class FetchRecipesTests: XCTestCase {
     func testRecipeServiceMalformed() async throws {
         let service = RecipeService()
         do {
-            let _ = try await service.fetchRecipes(endpoint: .fetchMalformedRecipes)
+            let _ = try await service.fetchRecipes(endpoint: .integrationMalformed)
             XCTFail("Expected this malformed endpoint to fail")
         } catch {
             print(error.localizedDescription)
@@ -45,8 +45,8 @@ final class FetchRecipesTests: XCTestCase {
     func testRecipeServiceEmpty() async throws {
         let service = RecipeService()
         do {
-            let recipes = try await service.fetchRecipes()
-            XCTAssert(!recipes.isEmpty)
+            let recipes = try await service.fetchRecipes(endpoint: .integrationEmpty)
+            XCTAssert(recipes.isEmpty)
         } catch {
             print(error.localizedDescription)
             XCTFail()

@@ -27,13 +27,7 @@ struct RecipeService: RecipeServiceProtocol {
             }
             
             let decoder = JSONDecoder()
-            
-            if let jsonString = String(data: data, encoding: .utf8) {
-                print("Raw JSON:", jsonString)
-            }
-            
             let recipesResponse = try decoder.decode(RecipesResponse.self, from: data)
-
             return recipesResponse.recipes
             
         } catch let error as DecodingError {

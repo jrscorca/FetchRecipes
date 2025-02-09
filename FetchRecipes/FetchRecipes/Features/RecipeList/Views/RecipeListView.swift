@@ -7,12 +7,37 @@
 
 import SwiftUI
 
-struct RecipeListView: View {
+struct InfiniteScrollView<Content: View>: View {
+    let recipes: [Recipe]
+    var content: (Recipe) -> Content
     var body: some View {
-        Text(/*@START_MENU_TOKEN@*/"Hello, World!"/*@END_MENU_TOKEN@*/)
+        List(recipes) {  item in
+            content(item)
+                .onAppear {
+                    
+                }
+        }.refreshable {
+            
+        }
+    }
+}
+
+struct RecipeListView: View {
+    @StateObject var viewModel: RecipeListViewModel
+    
+    var body: some View {
+        InfiniteScrollView(recipes: viewModel.recipes) { recipe in
+            Text(recipe.name)
+        }
+        .onAppear {
+            Task {
+                await viewModel.fetchRecipes()
+            }
+            
+        }
     }
 }
 
 #Preview {
-    RecipeListView()
+    RecipeListView(viewModel: RecipeListViewModel())
 }
