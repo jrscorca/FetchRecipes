@@ -8,10 +8,8 @@
 import Foundation
 
 enum RecipeEndpoint {
-    // Production endpoint
     case fetchAllRecipes
     
-    // Integration test endpoints
     #if DEBUG
     case integrationMalformed
     case integrationEmpty

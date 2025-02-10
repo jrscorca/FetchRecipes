@@ -19,29 +19,32 @@ struct RecipeCardView: View {
     }
     
     var body: some View {
-        HStack {
-            
-            /*
-            AsyncImage(url: URL(string: imageURL ?? "")) { image in
-                image.resizable()
-            } placeholder: {
+        HStack(spacing:22) {
+            if let imageURL, let url = URL(string: imageURL ) {
+                AsyncImageView(imageViewModel: ImageViewModel(url: url))
+                    .frame(width: 128, height: 128)
+                    .clipShape(.rect(cornerRadius: 25))
+            } else {
                 Color.gray
+                    .frame(width: 128, height: 128)
+                    .clipShape(.rect(cornerRadius: 25))
             }
-            .frame(width: 128, height: 128)
-            .clipShape(.rect(cornerRadius: 25))
-             */
-            
-            AsyncImageView(imageViewModel: ImageViewModel(url: URL(string: imageURL ?? "")!))
-                .frame(width: 128, height: 128)
-                .clipShape(.rect(cornerRadius: 25))
-            
-            VStack {
+            VStack(alignment: .leading, spacing: 8) {
                 Text(name)
+                    .font(.headline)
+                    .minimumScaleFactor(0.1)
+                    .lineLimit(2)
+                
                 Text(cuisine)
+                    .font(.subheadline)
+                    .minimumScaleFactor(0.1)
+                    .foregroundColor(.secondary)
             }
+            .padding(.vertical, 4)
             
-            
+            Spacer()
         }
+        //.padding(.horizontal)
     }
 }
 
