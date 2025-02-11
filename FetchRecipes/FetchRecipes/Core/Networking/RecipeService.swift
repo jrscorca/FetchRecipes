@@ -9,7 +9,7 @@ import Foundation
 
 actor RecipeService: RecipeServiceProtocol {
     
-    func fetchRecipes(endpoint: RecipeEndpoint = .fetchAllRecipes) async throws -> [Recipe] {
+    func fetchRecipes(endpoint: RecipeEndpoint = .fetchAllRecipes) async throws -> [RecipeDTO] {
         
         guard let url = endpoint.url else {
             throw NetworkError.invalidURL
@@ -27,6 +27,7 @@ actor RecipeService: RecipeServiceProtocol {
             }
             
             let decoder = JSONDecoder()
+            decoder.keyDecodingStrategy = .convertFromSnakeCase
             let recipesResponse = try decoder.decode(RecipesResponse.self, from: data)
             return recipesResponse.recipes
             

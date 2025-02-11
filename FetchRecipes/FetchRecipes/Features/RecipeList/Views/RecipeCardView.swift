@@ -10,9 +10,9 @@ import SwiftUI
 struct RecipeCardView: View {
     let name: String
     let cuisine: String
-    let imageURL: String?
+    let imageURL: URL?
     
-    init(name: String, cuisine: String, imageURL: String?) {
+    init(name: String, cuisine: String, imageURL: URL?) {
         self.name = name
         self.cuisine = cuisine
         self.imageURL = imageURL
@@ -20,8 +20,8 @@ struct RecipeCardView: View {
     
     var body: some View {
         HStack(spacing:22) {
-            if let imageURL, let url = URL(string: imageURL ) {
-                AsyncImageView(imageViewModel: ImageViewModel(url: url))
+            if let imageURL {
+                AsyncImageView(imageViewModel: ImageViewModel(url: imageURL))
                     .frame(width: 128, height: 128)
                     .clipShape(.rect(cornerRadius: 25))
             } else {
@@ -44,7 +44,6 @@ struct RecipeCardView: View {
             
             Spacer()
         }
-        //.padding(.horizontal)
     }
 }
 

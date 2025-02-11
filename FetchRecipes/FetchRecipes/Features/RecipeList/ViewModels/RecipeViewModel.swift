@@ -9,27 +9,26 @@ import Foundation
 
 @MainActor
 class RecipeViewModel: ObservableObject {
-    nonisolated private let recipeService: RecipeServiceProtocol
-    @Published var recipes: [Recipe] = []
-    @Published var isLoading: Bool = false
+    nonisolated private let recipeRepository: RecipeRepository
+    @Published private(set) var recipes: [Recipe] = []
+    @Published private(set) var isLoading: Bool = false
+    @Published var error: Error?
     
-    init(recipeService: RecipeServiceProtocol = RecipeService()) {
-        self.recipeService = recipeService
+    init(recipeRepository: RecipeRepository = DefaultRecipeRepository(service: RecipeService())) {
+        self.recipeRepository = recipeRepository
     }
     
-    func fetchRecipes() async throws {
+    func fetchRecipes() async {
+        guard !isLoading else { return }
         isLoading = true
-        try await Task.sleep(for: .seconds(6))
+        error = nil
         do {
-            let fetchedRecipes = try await recipeService.fetchRecipes(endpoint: .fetchAllRecipes)
+            let fetchedRecipes = try await recipeRepository.getAll()
             recipes = fetchedRecipes.sorted { $0.name < $1.name }
-            isLoading = false
         } catch {
-            print("Error fetching recipes: \(error)")
-            isLoading = false
-            throw error
-            
+            self.error = error
         }
+        isLoading = false
     }
 }
 

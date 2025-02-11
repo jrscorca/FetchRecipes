@@ -11,6 +11,7 @@ import SwiftUI
 public final class ImageViewModel: ObservableObject {
     nonisolated private let imageService: ImageServiceProtocol
     @Published public var image: UIImage?
+    @Published public var error: Error?
     private let url : URL
     
     init(imageService: ImageServiceProtocol = ImageService(), url: URL) {
@@ -18,9 +19,15 @@ public final class ImageViewModel: ObservableObject {
         self.url = url
     }
     
-    func fetchImage() async throws {
-        let data = try await imageService.fetchImageData(url: url)
-        image = UIImage(data: data)
+    func fetchImage() async {
+        error = nil
+        do {
+            let data = try await imageService.fetchImageData(url: url)
+            image = UIImage(data: data)
+        } catch {
+            self.error = error
+        }
+        
     }
     
     func cancelImageFetch() {

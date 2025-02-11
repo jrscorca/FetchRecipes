@@ -8,5 +8,5 @@
 import Foundation
 
 protocol RecipeServiceProtocol: Sendable {
-    func fetchRecipes(endpoint: RecipeEndpoint) async throws -> [Recipe]
+    func fetchRecipes(endpoint: RecipeEndpoint) async throws -> [RecipeDTO]
 }

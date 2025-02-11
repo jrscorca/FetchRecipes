@@ -1,5 +1,5 @@
 //
-//  RecipeListView.swift
+//  RecipeView.swift
 //  FetchRecipes
 //
 //  Created by Joshua Scorca on 2/10/25.
@@ -9,7 +9,6 @@ import SwiftUI
 
 struct RecipeView: View {
     @StateObject var viewModel: RecipeViewModel
-    @State private var showAlert: Bool = false
     var body: some View {
         NavigationStack {
             VStack {
@@ -23,16 +22,14 @@ struct RecipeView: View {
             }
             .onAppear {
                 Task {
-                    do {
-                        try await viewModel.fetchRecipes()
-                    } catch {
-                        showAlert = true
-                    }
+                    await viewModel.fetchRecipes()
                 }
             }
             .navigationTitle("Recipes")
-            .alert(isPresented: $showAlert) {
-                .init(title: Text("Error"), message: Text("Failed to load recipes."), dismissButton: .default(Text("OK")))
+            .alert("Error Loading Recipes", isPresented: .constant(viewModel.error != nil)) {
+                Button("OK") { viewModel.error = nil }
+            } message: {
+                Text(viewModel.error?.localizedDescription ?? "")
             }
         }
     }
@@ -52,7 +49,7 @@ struct EmptyRecipeView: View {
             )
             Button("Retry") {
                 Task {
-                    try await viewModel.fetchRecipes()
+                    await viewModel.fetchRecipes()
                 }
             }
             .offset(y: -50)
@@ -77,7 +74,7 @@ struct RecipeListView: View {
         }
         .refreshable {
             Task {
-                try await viewModel.fetchRecipes()
+                await viewModel.fetchRecipes()
             }
         }
     }

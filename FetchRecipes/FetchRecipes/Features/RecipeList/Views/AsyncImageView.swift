@@ -16,22 +16,22 @@ struct AsyncImageView: View {
                     .resizable()
                     .aspectRatio(contentMode: .fit)
             } else {
-                Color.gray
-                .aspectRatio(contentMode: .fit)
+                ZStack{
+                    Color.gray
+                        .aspectRatio(contentMode: .fit)
+                    Image(systemName: "fork.knife")
+                        .foregroundColor(.white)
+                        .font(.system(size: 40))
+                }
             }
         }
         .onAppear {
             Task {
-                do {
-                    try await imageViewModel.fetchImage()
-                } catch {
-                    #warning("Handle error by showing alert")
-                }
+                await imageViewModel.fetchImage()
             }
         }
         .onDisappear {
             imageViewModel.cancelImageFetch()
-            
         }
     }
 }
