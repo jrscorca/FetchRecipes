@@ -7,11 +7,6 @@
 
 import SwiftUI
 
-enum ImageRepositoryError: Error {
-    case saveToCacheFailed
-    case loadFromCacheFailed
-}
-
 actor DefaultImageRepository: ImageRepository {
     
     let imageService: ImageServiceProtocol
@@ -43,7 +38,7 @@ actor DefaultImageRepository: ImageRepository {
     
     private func saveImageToCache(data: Data, url: URL) throws {
         guard let cacheDirectory = FileManager.default.urls(for: .cachesDirectory, in: .userDomainMask).first else {
-            throw ImageRepositoryError.saveToCacheFailed
+            throw URLError(.fileDoesNotExist)
         }
         
         let fileURL = cacheDirectory.appendingPathComponent(url.absoluteString.hash.description)
@@ -51,23 +46,18 @@ actor DefaultImageRepository: ImageRepository {
             try FileManager.default.createDirectory(at: fileURL.deletingLastPathComponent(),
                                                     withIntermediateDirectories: true)
             try data.write(to: fileURL)
-        } catch {
-            throw ImageRepositoryError.saveToCacheFailed
         }
     }
     
     private func loadImageFromCache(url: URL) throws -> Data? {
         guard let cacheDirectory = FileManager.default.urls(for: .cachesDirectory, in: .userDomainMask).first else {
-            print("directory does not exist")
-            throw ImageRepositoryError.loadFromCacheFailed
+            throw URLError(.fileDoesNotExist)
         }
         let fileURL = cacheDirectory.appendingPathComponent(url.absoluteString.hash.description)
         
         if FileManager.default.fileExists(atPath: fileURL.path) {
             do {
                 return try Data(contentsOf: fileURL)
-            } catch {
-                throw ImageRepositoryError.loadFromCacheFailed
             }
         }
         return nil

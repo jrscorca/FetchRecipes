@@ -10,9 +10,9 @@ import SwiftUI
 @MainActor
 public final class ImageViewModel: ObservableObject {
     private let imageRepository: ImageRepository
-    @Published public var image: UIImage?
-    @Published public var error: Error?
     private let url : URL
+    @Published var image: UIImage?
+    @Published var error: Error?
     
     init(imageRepository: ImageRepository = DefaultImageRepository(imageService: ImageService()), url: URL) {
         self.imageRepository = imageRepository
@@ -26,7 +26,6 @@ public final class ImageViewModel: ObservableObject {
         } catch {
             self.error = error
         }
-        
     }
     
     func cancelImageFetch() {

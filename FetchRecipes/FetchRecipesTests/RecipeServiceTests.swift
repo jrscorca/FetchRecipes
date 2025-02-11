@@ -10,46 +10,66 @@ import XCTest
 
 final class RecipeServiceTests: XCTestCase {
     var sut: RecipeService!
-    
-    override func setUp() {
-        super.setUp()
-        sut = RecipeService()
-    }
-    
-    func testFetchRecipes_Success() async throws {
-        // Given
-        let mockURL = RecipeEndpoint.fetchAllRecipes.url!
+        var mockClient: MockHTTPClient!
         
-        // When
-        let recipes = try await sut.fetchRecipes(endpoint: .fetchAllRecipes)
-        
-        // Then
-        XCTAssertFalse(recipes.isEmpty)
-        XCTAssertNotNil(recipes.first?.name)
-        XCTAssertNotNil(recipes.first?.cuisine)
-    }
-    
-    func testFetchRecipes_MalformedData() async {
-        // Given
-        let mockURL = RecipeEndpoint.integrationMalformed.url!
-        
-        // When/Then
-        do {
-            _ = try await sut.fetchRecipes(endpoint: .integrationMalformed)
-            XCTFail("Expected error was not thrown")
-        } catch {
-            XCTAssertTrue(error is NetworkError)
+        override func setUp() {
+            mockClient = MockHTTPClient()
+            sut = RecipeService(client: mockClient)
         }
-    }
-    
-    func testFetchRecipes_EmptyData() async throws {
-        // Given
-        let mockURL = RecipeEndpoint.integrationEmpty.url!
         
-        // When
-        let recipes = try await sut.fetchRecipes(endpoint: .integrationEmpty)
+        func testFetchRecipes_Success() async throws {
+            // Given
+            let mockData = """
+            {
+                "recipes": [
+                    {
+                        "uuid": "1",
+                        "name": "Pizza",
+                        "cuisine": "Italian"
+                    }
+                ]
+            }
+            """.data(using: .utf8)!
+            
+            await mockClient.setMockData(mockData)
+            
+            let mockHttpResponse = HTTPURLResponse(
+                url: URL(string: "https://test.com")!,
+                statusCode: 200,
+                httpVersion: nil,
+                headerFields: nil
+            )
+            await mockClient.setMockResponse(mockHttpResponse)
+            
+            // When
+            let recipes = try await sut.fetchRecipes()
+            
+            // Then
+            XCTAssertEqual(recipes.count, 1)
+            XCTAssertEqual(recipes[0].name, "Pizza")
+        }
         
-        // Then
-        XCTAssertTrue(recipes.isEmpty)
-    }
+        func testFetchRecipes_BadResponse() async {
+            // Given
+            await mockClient.setMockData(Data())
+            
+            let mockHttpResponse = HTTPURLResponse(
+                url: URL(string: "https://test.com")!,
+                statusCode: 404,
+                httpVersion: nil,
+                headerFields: nil
+            )
+            await mockClient.setMockResponse(mockHttpResponse)
+            
+            // When/Then
+            do {
+                _ = try await sut.fetchRecipes()
+                XCTFail("Expected error but got success")
+            } catch let error as URLError {
+                XCTAssertEqual(error.code, .badServerResponse)
+            } catch {
+                XCTFail("Unexpected Error")
+            }
+        }
+
 }

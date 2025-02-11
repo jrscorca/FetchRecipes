@@ -11,8 +11,8 @@ enum RecipeEndpoint {
     case fetchAllRecipes
     
     #if DEBUG
-    case integrationMalformed
-    case integrationEmpty
+    case recipesMalformed
+    case recipesEmpty
     #endif
     
     var url: URL? {
@@ -23,9 +23,9 @@ enum RecipeEndpoint {
             return URL(string: "\(baseURL)/recipes.json")
             
         #if DEBUG
-        case .integrationMalformed:
+        case .recipesMalformed:
             return URL(string: "\(baseURL)/recipes-malformed.json")
-        case .integrationEmpty:
+        case .recipesEmpty:
             return URL(string: "\(baseURL)/recipes-empty.json")
         #endif
         }
@@ -37,8 +37,8 @@ enum RecipeEndpoint {
             return "GET"
             
         #if DEBUG
-        case .integrationMalformed,
-             .integrationEmpty:
+        case .recipesMalformed,
+             .recipesEmpty:
             return "GET"
         #endif
         }

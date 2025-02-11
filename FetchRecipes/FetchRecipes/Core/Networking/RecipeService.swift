@@ -8,22 +8,26 @@
 import Foundation
 
 actor RecipeService: RecipeServiceProtocol {
+    private let client: HTTPClient
+    
+    init(client: HTTPClient) {
+        self.client = client
+    }
     
     func fetchRecipes(endpoint: RecipeEndpoint = .fetchAllRecipes) async throws -> [RecipeDTO] {
         
         guard let url = endpoint.url else {
-            throw NetworkError.invalidURL
+            throw URLError(.badURL)
         }
         
         var request = URLRequest(url: url)
         request.httpMethod = endpoint.method
         
         do {
-            let (data, response) = try await URLSession.shared.data(for: request)
+            let (data, response) = try await client.getData(for: request)
             
-            guard let response = response as? HTTPURLResponse,
-                  (200...299).contains(response.statusCode) else {
-                throw NetworkError.invalidResponse
+            guard (200...299).contains(response.statusCode) else {
+                throw URLError(.badServerResponse)
             }
             
             let decoder = JSONDecoder()
@@ -31,12 +35,6 @@ actor RecipeService: RecipeServiceProtocol {
             let recipesResponse = try decoder.decode(RecipesResponse.self, from: data)
             return recipesResponse.recipes
             
-        } catch let error as DecodingError {
-            print(error.localizedDescription)
-            throw NetworkError.decodingFailed
-        } catch {
-            print(error.localizedDescription)
-            throw NetworkError.requestFailed(error)
         }
     }
 }

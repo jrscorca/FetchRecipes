@@ -23,7 +23,7 @@ class RecipeViewModel: ObservableObject {
         }
     }
     
-    init(recipeRepository: RecipeRepository = DefaultRecipeRepository(service: RecipeService())) {
+    init(recipeRepository: RecipeRepository = DefaultRecipeRepository(service: RecipeService(client: URLSessionHTTPClient()))) {
         self.recipeRepository = recipeRepository
     }
     

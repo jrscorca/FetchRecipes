@@ -7,11 +7,6 @@
 
 import Foundation
 
-enum ImageServiceError : Error {
-    case badServerResponse
-    case requestFailed
-}
-
 actor ImageService: ImageServiceProtocol {
     private var tasks : [URL: Task<Data, Error>]
     
@@ -30,21 +25,16 @@ actor ImageService: ImageServiceProtocol {
             
             guard let response = response as? HTTPURLResponse,
                   (200...299).contains(response.statusCode) else {
-                throw ImageServiceError.badServerResponse
+                throw URLError(.badServerResponse)
             }
             return data
         }
         
         do {
             let data = try await task.value
-            
             tasks[url] = nil
             return data
-        } catch let error as ImageServiceError {
-            tasks[url] = nil
-            throw error
         }
-        
     }
     
     nonisolated func cancelFetch(url: URL) {
