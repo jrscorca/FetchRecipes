@@ -19,11 +19,4 @@ actor DefaultRecipeRepository: RecipeRepository {
         return dtos.map { Recipe(dto: $0) }
     }
     
-    func getById(_ id: String) async throws -> Recipe? {
-        guard let dto = try await service.fetchRecipes(endpoint: .fetchAllRecipes).first(where: { $0.uuid == id }) else {return nil}
-        return Recipe(dto: dto)
-    }
-    
-
-    
 }

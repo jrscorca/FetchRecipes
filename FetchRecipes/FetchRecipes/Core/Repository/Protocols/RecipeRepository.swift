@@ -9,5 +9,4 @@ import Foundation
 
 protocol RecipeRepository: Sendable{
     func getAll() async throws -> [Recipe]
-    func getById(_ id: String) async throws -> Recipe?
 }

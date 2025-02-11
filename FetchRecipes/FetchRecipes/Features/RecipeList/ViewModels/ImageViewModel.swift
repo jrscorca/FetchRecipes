@@ -9,21 +9,20 @@ import SwiftUI
 
 @MainActor
 public final class ImageViewModel: ObservableObject {
-    nonisolated private let imageService: ImageServiceProtocol
+    private let imageRepository: ImageRepository
     @Published public var image: UIImage?
     @Published public var error: Error?
     private let url : URL
     
-    init(imageService: ImageServiceProtocol = ImageService(), url: URL) {
-        self.imageService = imageService
+    init(imageRepository: ImageRepository = DefaultImageRepository(imageService: ImageService()), url: URL) {
+        self.imageRepository = imageRepository
         self.url = url
     }
     
     func fetchImage() async {
         error = nil
         do {
-            let data = try await imageService.fetchImageData(url: url)
-            image = UIImage(data: data)
+            image = try await imageRepository.get(from: url)
         } catch {
             self.error = error
         }
@@ -31,7 +30,6 @@ public final class ImageViewModel: ObservableObject {
     }
     
     func cancelImageFetch() {
-        imageService.cancelFetch(url: url)
+        imageRepository.cancelFetch(for: url)
     }
-    
 }

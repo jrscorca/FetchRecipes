@@ -16,6 +16,8 @@ struct RecipeView: View {
                     RecipeLoadingView()
                 } else if viewModel.recipes.isEmpty {
                     EmptyRecipeView(viewModel: viewModel)
+                } else if viewModel.sectionedRecipes.isEmpty{
+                    NoResultsView()
                 } else {
                     RecipeListView(viewModel: viewModel)
                 }
@@ -31,6 +33,7 @@ struct RecipeView: View {
             } message: {
                 Text(viewModel.error?.localizedDescription ?? "")
             }
+            .searchable(text: $viewModel.searchText, prompt: "Search recipes")
         }
     }
 }
@@ -57,6 +60,17 @@ struct EmptyRecipeView: View {
     }
 }
 
+struct NoResultsView: View {
+    var body: some View {
+        VStack {
+            ContentUnavailableView("No Recipes Found",
+                                   systemImage: "fork.knife.circle",
+                                   description: Text("Refine your search and try again.")
+            )
+        }
+    }
+}
+
 struct RecipeLoadingView: View {
     var body: some View {
         VStack {
@@ -69,8 +83,18 @@ struct RecipeLoadingView: View {
 struct RecipeListView: View {
     @ObservedObject var viewModel: RecipeViewModel
     var body: some View {
-        List(viewModel.recipes) { recipe in
-            RecipeCardView(name: recipe.name, cuisine: recipe.cuisine, imageURL: recipe.photoUrlSmall)
+        List {
+            ForEach(viewModel.sections, id: \.self) { cuisine in
+                Section(header: Text(cuisine)) {
+                    ForEach(viewModel.sectionedRecipes[cuisine] ?? []) { recipe in
+                        RecipeCardView(
+                            name: recipe.name,
+                            cuisine: recipe.cuisine,
+                            imageURL: recipe.photoUrlSmall
+                        )
+                    }
+                }
+            }
         }
         .refreshable {
             Task {
