@@ -11,7 +11,7 @@ actor DefaultImageRepository: ImageRepository {
     
     let imageService: ImageServiceProtocol
     
-    init(imageService: ImageServiceProtocol) {
+    init(imageService: ImageServiceProtocol = ImageService()) {
         self.imageService = imageService
     }
     

@@ -14,7 +14,7 @@ public final class ImageViewModel: ObservableObject {
     @Published var image: UIImage?
     @Published var error: Error?
     
-    init(imageRepository: ImageRepository = DefaultImageRepository(imageService: ImageService()), url: URL) {
+    init(imageRepository: ImageRepository = DefaultImageRepository(), url: URL) {
         self.imageRepository = imageRepository
         self.url = url
     }

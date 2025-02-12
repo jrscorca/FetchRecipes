@@ -8,10 +8,12 @@
 import Foundation
 
 actor ImageService: ImageServiceProtocol {
+    private let client: HTTPClient
     private var tasks : [URL: Task<Data, Error>]
     
-    init(tasks: [URL : Task<Data, Error>] = [:]) {
+    init(client: HTTPClient = URLSessionHTTPClient(), tasks: [URL : Task<Data, Error>] = [:]) {
         self.tasks = tasks
+        self.client = client
     }
     
     func fetchImageData(url: URL) async throws -> Data {
@@ -20,15 +22,15 @@ actor ImageService: ImageServiceProtocol {
         }
         
         let task = Task<Data, Error> {
-            let (data, response) = try await URLSession.shared.data(for: URLRequest(url: url))
+            let (data, response) = try await client.getData(for: URLRequest(url: url))
             try Task.checkCancellation()
-            
-            guard let response = response as? HTTPURLResponse,
-                  (200...299).contains(response.statusCode) else {
+            guard (200...299).contains(response.statusCode) else {
                 throw URLError(.badServerResponse)
             }
             return data
         }
+        
+        tasks[url] = task
         
         do {
             let data = try await task.value
@@ -47,6 +49,5 @@ actor ImageService: ImageServiceProtocol {
         tasks[url]?.cancel()
         tasks[url] = nil
     }
-    
     
 }
