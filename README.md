@@ -1,7 +1,6 @@
 # FetchRecipes
-Take Home Project for Fetch
+Take Home Project for Fetch.  Recipes are downloaded from the server upon launch and displayed in a list with sections denoting cuisine.  The sections and sublists appear in alphabetical order.  If no data is available, the user is prompted to retry fetching the recipes.  If an eror is encountered, the error is displayed as an alert.  The user may pull to refresh and can filter the recipes using the search bar.  Images are downloaded only as needed.  If the user scrolls too fast for an image to be downloaded in time, the task is cancelled.  Images are saved to disk so that redundant network calls are not made.  
 
-### Summary: Include screen shots or a video of your app highlighting its features
 <p float="left">
   <img src="Screenshots/Screen5.png" width="240" alt="Main Screen">
   <img src="Screenshots/Screen4.png" width="240" alt="Search by Cuisine">
@@ -10,7 +9,6 @@ Take Home Project for Fetch
 </p>
 
 ### Focus Areas: What specific areas of the project did you prioritize? Why did you choose to focus on these areas?
-
 
 * Clean Architecture & SOLID Principles
 
