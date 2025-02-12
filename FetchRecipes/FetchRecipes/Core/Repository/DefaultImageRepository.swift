@@ -26,14 +26,8 @@ actor DefaultImageRepository: ImageRepository {
         return UIImage(data: data)
     }
     
-    nonisolated func cancelFetch(for url: URL) {
-        Task {
-            await self.cancelFetchAsync(url: url)
-        }
-    }
-
-    private func cancelFetchAsync(url: URL) async {
-        imageService.cancelFetch(url: url)
+    func cancelFetch(for url: URL) async {
+        await imageService.cancelFetch(url: url)
     }
     
     private func saveImageToCache(data: Data, url: URL) throws {

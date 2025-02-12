@@ -94,30 +94,28 @@ final class ImageServiceTests: XCTestCase {
         XCTAssertEqual(count, 1)
     }
     
-    func testCancelFetch() async {
+    func testCancelFetch() async throws {
         // Given
         let testURL = URL(string: "https://mock.com")!
-        
         await mockClient.setSimulateDelay(true)
         
         // When
-        Task {
-            do {
-                _ = try await sut.fetchImageData(url: testURL)
-                XCTFail("Expected cancellation")
-            } catch is CancellationError {
-                // Success - task was cancelled
-            } catch {
-                XCTFail("Expected cancellation error but got \(error)")
-            }
+        let fetchTask = Task {
+            try await sut.fetchImageData(url: testURL)
         }
         
-        // Give the fetch task time to start
-        try? await Task.sleep(nanoseconds: 100_000_000)
+        try await Task.sleep(nanoseconds: 100_000_000)
+        
+        await sut.cancelFetch(url: testURL)
         
         // Then
-        // Cancel before thet task is completed
-        sut.cancelFetch(url: testURL)
+        do {
+            _ = try await fetchTask.value
+            XCTFail("Expected cancellation")
+        } catch is CancellationError {
+            // Success - task was cancelled
+        } catch {
+            XCTFail("Expected cancellation error but got \(error)")
+        }
     }
-    
 }
