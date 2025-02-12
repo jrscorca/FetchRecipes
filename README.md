@@ -14,7 +14,7 @@ Take Home Project for Fetch
 
 * Clean Architecture & SOLID Principles
 
-  * Because this is a Staff level position, I prioritized architectural integrity over UI polish.
+  * Because this is a staff level position, I prioritized MVVM, clean architecture, and SOLID principles over UI polish.
   * Implemented clear layering and separation of concerns
   * Focused on creating a maintainable, scalable foundation that can be expanded upon and easily followed by other developers.
 
@@ -51,7 +51,18 @@ There are some edge cases I decided not address due to time constraints.
 * cache eviction and size limits
 * Slow conection timeouts
 * Device Orientation
-* IPad UI formatting
+* Mac support (but it does work on iPad and appleTV!)
 
 ### Additional Information: Is there anything else we should know? Feel free to share any insights or constraints you encountered.
+* You can filter by recipe name OR cusine.
+* Task for downloading an images is cancelled if the recipe card is quickly moved off screen.
+* If one recipe has the same imageURL as another recipe, only one reqest is made.
+* Caching images to .cache directory using FileManager.
+* Created Endpoint enum for easily switching between the Empty, Malformed, and GoodPath endpoints.
+  * If you want to switch between the endpoints, go to DefaultRecipeRepository.swift and inject .recipesMalformed or .recipesEmpty in the initializer instead of .fetchAllRecipes
+  * .recipesEmpty amd .recipesMalformed are only available in DEBGUG to prevent accidental use in production.
+
+
+
+
 
