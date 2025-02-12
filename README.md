@@ -3,7 +3,6 @@ This is a take home project for Fetch.  Recipes are downloaded from the server u
 
 <p float="left">
   <img src="Screenshots/Screen5.png" width="240" alt="Main Screen">
-  <img src="Screenshots/Screen4.png" width="240" alt="Search by Cuisine">
   <img src="Screenshots/Screen3.png" width="240" alt="Search by Recipe Name">
   <img src="Screenshots/Screen1.png" width="240" alt="No Search Results">
 </p>
