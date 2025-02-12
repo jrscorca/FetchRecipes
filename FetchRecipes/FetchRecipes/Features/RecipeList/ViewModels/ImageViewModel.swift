@@ -28,7 +28,8 @@ public final class ImageViewModel: ObservableObject {
         }
     }
     
-    func cancelImageFetch() {
-        imageRepository.cancelFetch(for: url)
+    func cancelImageFetch() async {
+        await imageRepository.cancelFetch(for: url)
+        
     }
 }

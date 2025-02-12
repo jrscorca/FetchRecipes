@@ -31,7 +31,9 @@ struct AsyncImageView: View {
             }
         }
         .onDisappear {
-            imageViewModel.cancelImageFetch()
+            Task {
+                await imageViewModel.cancelImageFetch()
+            }
         }
     }
 }

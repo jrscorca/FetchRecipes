@@ -39,10 +39,8 @@ actor ImageService: ImageServiceProtocol {
         }
     }
     
-    nonisolated func cancelFetch(url: URL) {
-        Task {
-            await self.cancelFetchAsync(url: url)
-        }
+    func cancelFetch(url: URL) async {
+        await self.cancelFetchAsync(url: url)
     }
 
     private func cancelFetchAsync(url: URL) async {

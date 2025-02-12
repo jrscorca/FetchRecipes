@@ -9,5 +9,5 @@ import Foundation
 
 protocol ImageServiceProtocol: Sendable {
     func fetchImageData(url: URL) async throws -> Data
-    func cancelFetch(url: URL)
+    func cancelFetch(url: URL) async
 }
