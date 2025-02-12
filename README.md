@@ -57,7 +57,7 @@ There are some edge cases I decided not address due to time constraints.
 * You can filter by recipe name OR cusine.
 * Task for downloading an images is cancelled if the recipe card is quickly moved off screen.
 * If one recipe has the same imageURL as another recipe, only one reqest is made.
-* Caching images to .cache directory using FileManager.
+* Saving images to .cache directory using FileManager.
 * Created Endpoint enum for easily switching between the Empty, Malformed, and GoodPath endpoints.
   * If you want to switch between the endpoints, go to DefaultRecipeRepository.swift and inject .recipesMalformed or .recipesEmpty in the initializer instead of .fetchAllRecipes
   * .recipesEmpty amd .recipesMalformed are only available in DEBGUG to prevent accidental use in production.
