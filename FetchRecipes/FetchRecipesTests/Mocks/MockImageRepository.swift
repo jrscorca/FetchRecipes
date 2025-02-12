@@ -15,7 +15,6 @@ actor MockImageRepository: ImageRepository {
     var error: Error?
     var cancelledURLs: Set<URL> = []
     
-    // Helper to set up mock data
     func setMockImageData(_ data: Data, for url: URL) {
         mockImageData[url] = data
     }
