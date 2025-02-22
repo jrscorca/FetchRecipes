@@ -21,6 +21,16 @@
 		F21B7C932D581EBD00AE272C /* FetchRecipesTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = FetchRecipesTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 /* End PBXFileReference section */
 
+/* Begin PBXFileSystemSynchronizedBuildFileExceptionSet section */
+		F2FFA7642D69692100A057D5 /* Exceptions for "FetchRecipesTests" folder in "FetchRecipesTests" target */ = {
+			isa = PBXFileSystemSynchronizedBuildFileExceptionSet;
+			membershipExceptions = (
+				FetchRecipes.xctestplan,
+			);
+			target = F21B7C922D581EBD00AE272C /* FetchRecipesTests */;
+		};
+/* End PBXFileSystemSynchronizedBuildFileExceptionSet section */
+
 /* Begin PBXFileSystemSynchronizedRootGroup section */
 		F21B7C842D581EBB00AE272C /* FetchRecipes */ = {
 			isa = PBXFileSystemSynchronizedRootGroup;
@@ -29,6 +39,9 @@
 		};
 		F21B7C962D581EBD00AE272C /* FetchRecipesTests */ = {
 			isa = PBXFileSystemSynchronizedRootGroup;
+			exceptions = (
+				F2FFA7642D69692100A057D5 /* Exceptions for "FetchRecipesTests" folder in "FetchRecipesTests" target */,
+			);
 			path = FetchRecipesTests;
 			sourceTree = "<group>";
 		};
